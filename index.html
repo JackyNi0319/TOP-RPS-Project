@@ -9,6 +9,12 @@
 </head>
 <body>
     <p>Hello world!</p>
-    <button onclick="game()">Press me to start the game!</button>
+    <p>Score:</p>
+    <p id="score"></p>
+    <button class="choice" onclick="playerChoice('ROCK')">Rock</button>
+    <button class="choice" onclick="playerChoice('PAPER')">Paper</button>
+    <button class="choice" onclick="playerChoice('SCISSORS')">Scissors</button>
+    <div id="play-again"></div>
+    <p id="round-winner"></p>
 </body>
 </html>

@@ -7,48 +7,48 @@ function getComputerChoice() {
     return options[Math.floor(Math.random() * 3)];
 }
 
+// compares player and ai choice to decide on winner
 function playRound(playerSelection, computerSelection) {
+    const score = document.querySelector('#score');
+    const rdWinner = document.querySelector('#round-winner');
     if (playerSelection == "ROCK" && computerSelection == "SCISSORS" ||
         playerSelection == "PAPER" && computerSelection == "ROCK" ||
         playerSelection == "SCISSORS" && computerSelection == "PAPER") {
-            console.log("You win this round");
+            rdWinner.textContent = "You won this round!"
             ++counter;
         }
     else if (playerSelection == "ROCK" && computerSelection == "ROCK" ||
         playerSelection == "PAPER" && computerSelection == "ROCK" ||
         playerSelection == "SCISSORS" && computerSelection == "SCISSORS") {
-            console.log("This round is a draw")
+            rdWinner.textContent = "This round is a draw"
     }
     else {
-        console.log("AI wins this round");
+        rdWinner.textContent = "AI won this round!"
         ++aiCounter;
     }
+
+    score.textContent = `You: ${counter} || AI: ${aiCounter}`;
+    if (counter == 5 || aiCounter == 5) decideWinner();
 }
 
-function game() {
-    // 5 rounds per game
-    for (let i = 0; i < 5; ++i) {
-        // get initial choices
-        console.log(`Game ${i+1}`);
-        let playerChoice = prompt("Please pick 'Rock', 'Paper', or 'Scissors':");
-        if (playerChoice == null) return;
-        let upperCaseChoice = playerChoice.toUpperCase();
-        const computerChoice = getComputerChoice();
-
-        // prompt player for valid choice if initial choice is incorrect
-        while (upperCaseChoice != options[0] && upperCaseChoice != options[1] && upperCaseChoice != options[2]) {
-                alert(`'${playerChoice}' is not a valid option.`)
-                playerChoice = prompt("Please pick 'Rock', 'Paper', or 'Scissors' (case-insensitive):");
-                if (playerChoice == null) return;
-                upperCaseChoice = playerChoice.toUpperCase();
-        }
-
-        // decide on the winner
-        playRound(playerChoice.toUpperCase(), computerChoice);
-    }
-
-    decideWinner();
+function playerChoice(playerSelection) {
+    playRound(playerSelection, getComputerChoice());
 }
+
+// function game() {
+//     // 5 rounds per game
+//     while (counter < 5 && aiCounter < 5) {
+//         // get initial choices
+        
+//         const computerChoice = getComputerChoice();
+
+        
+//         // decide on the winner
+//         playRound(playerChoice.toUpperCase(), computerChoice);
+//     }
+
+//     decideWinner();
+// }
 
 function decideWinner() {
     if (counter > aiCounter) {
@@ -63,4 +63,42 @@ function decideWinner() {
     else {
         console.warn("Hmmmm...Something went wrong")
     }
+    disableOptions();
+    playAgain();
 }
+
+function disableOptions() {
+    const btns = document.querySelectorAll('.choice');
+    btns.forEach((btn)=> {
+        btn.disabled = true;
+    });
+}
+
+function enableOptions() {
+    const btns = document.querySelectorAll('.choice');
+    btns.forEach((btn)=> {
+        btn.disabled = false;
+    });
+}
+
+function playAgain() {
+    const btn = document.createElement('button');
+    const restart = document.querySelector('#play-again');
+    btn.className = "reset";
+    btn.textContent = "Play Again";
+    console.log(restart);
+    restart.appendChild(btn);
+
+    btn.addEventListener("click", () => {
+        counter = 0;
+        aiCounter = 0;
+        restart.removeChild(btn);
+        enableOptions();
+
+        const score = document.querySelector('#score');
+        const rdWinner = document.querySelector('#round-winner');
+        score.textContent = "";
+        rdWinner.textContent = "";
+    });
+}
+
